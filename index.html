@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itakito_GT | Profile</title>
-    
     <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.3);
+            --accent: #5865F2;
+        }
+
         body {
             background: url('https://www.10wallpaper.com/wallpaper/1366x768/1508/sardinia_italy-Landscape_wallpaper_1366x768.jpg') no-repeat center center fixed;
             background-size: cover;
@@ -14,11 +19,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
             overflow: hidden;
+            color: white;
         }
 
-        /* --- BARRA DE NAVEGACIÓN SUPERIOR --- */
+        /* --- NAVBAR & DROPDOWN --- */
         .navbar {
             width: 100%;
             height: 50px;
@@ -34,339 +40,270 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a, .user-section a {
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-size: 14px;
-            font-weight: 500;
-            transition: 0.3s;
+            margin-right: 20px;
             opacity: 0.8;
+            transition: 0.3s;
         }
 
-        .nav-links a:hover, .user-section a:hover {
-            opacity: 1;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
+        .nav-links a:hover { opacity: 1; }
 
-        .user-section {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        /* Estilo para usuario logeado */
+        .user-menu-container { position: relative; cursor: pointer; }
+        
         .logged-in-user {
-            display: none; /* Se activa con JS */
+            display: none;
             align-items: center;
             gap: 10px;
         }
 
-        .user-avatar-nav {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px solid white;
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: #18191c;
+            border-radius: 8px;
+            width: 200px;
+            padding: 10px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .dropdown-menu a:hover { background: var(--accent); color: white; }
+
+        /* --- MAIN CARDS --- */
         .main-container {
-            margin-top: 50px;
-            height: calc(100vh - 50px);
+            margin-top: 60px;
+            width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            width: 100%;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--glass);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--border);
             width: 90%;
-            max-width: 850px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            color: white;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .banner {
-            width: 100%;
-            height: 150px;
-            background: url('https://yt3.googleusercontent.com/wfJZQY6P1kmvSTI3eGTSU8QQFgid2G9-pZvQHCUupZhSHQdRXGWhfrYKtlHIgCT8yLekAABL=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj') no-repeat center center;
-            background-size: cover;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .content-padding {
-            padding: 30px 40px 40px 40px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
+            max-width: 800px;
             margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .profile-info {
+        .tabs {
             display: flex;
-            align-items: center;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 20px;
+            gap: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: white;
+            opacity: 0.6;
+            cursor: pointer;
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn.active { opacity: 1; border-bottom: 2px solid white; }
+
+        /* --- FEED / TWITTER STYLE --- */
+        .post-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+        }
+
+        .post-box textarea {
+            width: 100%;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            resize: none;
+            outline: none;
+        }
+
+        .feed-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            display: flex;
             gap: 15px;
         }
 
-        .my-logo {
-            width: 65px;
-            height: 65px;
+        .avatar-circle {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-size: cover;
         }
 
-        .my-logo:hover { transform: scale(1.1); }
-
-        .user-name {
-            font-size: 32px;
-            font-weight: bold;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-        }
-
-        .discord-btn {
-            background: rgba(88, 101, 242, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .discord-btn:hover { background: #5865F2; transform: translateY(-2px); }
-
-        .info-content h2 { color: #ffffff; font-size: 26px; margin-top: 0; }
-        .info-content p { line-height: 1.6; font-size: 18px; color: rgba(255, 255, 255, 0.95); }
-
-        /* --- LOGIN TIPO LIBRO --- */
-        .login-card {
-            display: none; /* Se muestra al dar clic en login */
-            background: white;
-            width: 700px;
-            height: 450px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .login-book {
-            display: flex;
-            height: 100%;
-        }
-
-        .login-left {
-            flex: 1;
-            background: linear-gradient(135deg, #FF0000, #5865F2);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            padding: 20px;
-        }
-
-        .login-left img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
-            margin-bottom: 15px;
-        }
-
-        .login-right {
-            flex: 1.2;
-            background: #f4f4f4;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            color: #333;
-        }
-
-        .login-right h3 { margin-bottom: 20px; font-size: 24px; color: #111; }
-
-        .input-group { margin-bottom: 15px; text-align: left; }
-        .input-group label { display: block; font-size: 12px; margin-bottom: 5px; color: #666; font-weight: bold; }
-        .input-group input {
+        /* --- SETTINGS --- */
+        .settings-form { padding: 30px; }
+        .settings-form input, .settings-form textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
-
-        .login-btn {
-            background: #111;
-            color: white;
-            border: none;
             padding: 12px;
+            margin: 10px 0;
             border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
-            transition: 0.3s;
+            border: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+            color: white;
         }
 
-        .login-btn:hover { background: #333; }
-
-        /* MODALES */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 4000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .img-modal-content {
-            width: 350px; height: 350px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid white;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body onload="checkHash()">
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-links">
-            <a href="https://itakitogt.github.io/itakitogt/">Inicio</a>
-            <a href="#" onclick="showSection('juegos')">Juegos</a>
+            <a href="#home" onclick="showSection('home')">Inicio</a>
+            <a href="#juegos" onclick="showSection('juegos')">Juegos</a>
         </div>
         
-        <div class="user-section" id="auth-links">
-            <a href="#" onclick="showSection('login')">Iniciar sesión</a>
-            <a href="https://itakitogt.github.io/registrarse/">Registrarse</a>
+        <div id="auth-links" class="user-section">
+            <a href="#login" onclick="showSection('login')">Iniciar sesión</a>
+            <a href="#login" onclick="showSection('login')">Registrarse</a>
         </div>
 
-        <div class="logged-in-user" id="user-profile">
-            <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" class="user-avatar-nav">
-            <span style="color: white; font-size: 14px; font-weight: bold;">ItakitoYT</span>
+        <div id="user-profile" class="user-menu-container" onclick="toggleDropdown()">
+            <div class="logged-in-user" style="display: flex;">
+                <img id="nav-avatar" src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" style="width:30px; height:30px; border-radius:50%;">
+                <span id="nav-name" style="font-weight: bold;">ItakitoYT</span>
+            </div>
+            <div id="profile-dropdown" class="dropdown-menu">
+                <a href="#settings" onclick="showSection('settings')">⚙️ Ajustes de Perfil</a>
+                <a href="#home" onclick="logout()">🚪 Cerrar Sesión</a>
+            </div>
         </div>
     </nav>
 
     <div class="main-container">
         
-        <!-- SECCIÓN PERFIL (INICIO) -->
+        <!-- SECCIÓN HOME -->
         <div id="section-home" class="glass-card">
-            <div class="banner"></div>
-            <div class="content-padding">
-                <header class="header">
-                    <div class="profile-info">
-                        <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" 
-                             class="my-logo" onclick="openLogoModal()">
-                        <h1 class="user-name">Itakito_GT</h1>
-                    </div>
-                    <button class="discord-btn" onclick="toggleDiscord()">
-                        <svg width="28" height="28" viewBox="0 0 127.14 96.36" fill="white"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.48,80.21h0A105.73,105.73,0,0,0,32.47,96.36,77.7,77.7,0,0,0,39,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.57,11.1,105.52,105.52,0,0,0,32-16.15h0C130.41,51.49,121.1,27.85,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-                    </button>
-                </header>
-                <main class="info-content">
-                    <h2>Acerca de mí</h2>
-                    <p>¡Hola! Soy un <strong>DEV de sistemas</strong> experto en optimización de Windows e infraestructura de Minecraft.</p>
-                    <p>Actualmente trabajando en <strong>ItaOS Lite</strong> para que hasta una Lenovo G570 vuele.</p>
-                </main>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('general')">General</button>
+                <button class="tab-btn" onclick="showTab('destacado')">Destacado</button>
             </div>
-        </div>
 
-        <!-- SECCIÓN JUEGOS (PRÓXIMAMENTE) -->
-        <div id="section-juegos" class="glass-card" style="display: none; text-align: center;">
-            <div class="banner"></div>
-            <div class="content-padding">
-                <h1 style="font-size: 50px;">PROXIMAMENTE</h1>
-                <p>Estamos preparando la mejor selección de juegos optimizados para bajos recursos.</p>
-                <button class="login-btn" style="background: rgba(255,255,255,0.2);" onclick="showSection('home')">Volver</button>
+            <div id="tab-general" class="content-padding" style="padding: 30px;">
+                <h1 id="display-name">Itakito_GT</h1>
+                <p id="display-bio">DEV de sistemas experto en optimización de Windows e infraestructura de Minecraft.</p>
             </div>
-        </div>
 
-        <!-- SECCIÓN LOGIN (TIPO LIBRO) -->
-        <div id="section-login" class="login-card">
-            <div class="login-book">
-                <div class="login-left">
-                    <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" alt="Logo">
-                    <h2>Itakito_GT</h2>
-                    <p style="font-size: 12px; opacity: 0.8;">Accede a contenido exclusivo</p>
+            <div id="tab-destacado" style="display: none;">
+                <div class="post-box">
+                    <textarea id="post-text" placeholder="¿Qué hay de nuevo, we?"></textarea>
+                    <button class="tab-btn" style="background: var(--accent); padding: 8px 20px; border-radius: 20px; opacity: 1;" onclick="addPost()">Publicar</button>
                 </div>
-                <div class="login-right">
-                    <h3>Iniciar sesión</h3>
-                    <div class="input-group">
-                        <label>CORREO ELECTRÓNICO</label>
-                        <input type="email" placeholder="tu@correo.com">
+                <div id="feed">
+                    <div class="feed-item">
+                        <div class="avatar-circle" style="background-image: url('https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj');"></div>
+                        <div>
+                            <strong>ItakitoYT</strong> <span style="opacity:0.5; font-size:12px;">@itakitogt</span>
+                            <p>¡Nuevo **ItaOS LITE** casi listo para la Lenovo G570! 🚀</p>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>CONTRASEÑA</label>
-                        <input type="password" placeholder="••••••••">
-                    </div>
-                    <button class="login-btn" onclick="simulateLogin()">ENTRAR</button>
-                    <p style="font-size: 11px; color: #888; margin-top: 15px; cursor: pointer;" onclick="showSection('home')">Cancelar y volver</p>
                 </div>
             </div>
         </div>
 
-    </div>
+        <!-- SECCIÓN AJUSTES -->
+        <div id="section-settings" class="glass-card" style="display:none;">
+            <div class="settings-form">
+                <h2>Ajustes de Perfil</h2>
+                <label>Nombre de Usuario</label>
+                <input type="text" id="edit-name" value="ItakitoYT">
+                <label>Descripción</label>
+                <textarea id="edit-bio">DEV de sistemas y optimizador de juegos.</textarea>
+                <button class="tab-btn" style="background: green; padding: 10px 20px; border-radius: 8px; opacity: 1;" onclick="saveSettings()">Guardar Cambios</button>
+            </div>
+        </div>
 
-    <!-- MODAL DEL LOGO -->
-    <div id="logoModal" class="modal" onclick="closeLogoModal()">
-        <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" class="img-modal-content">
+        <!-- SECCIÓN LOGIN (OCULTA POR DEFECTO) -->
+        <div id="section-login" style="display:none; color:black;">
+            <!-- (Tu código de Login tipo libro iría aquí para mantener el diseño) -->
+            <button onclick="simulateLogin()" style="padding:20px; cursor:pointer;">Hacer Login de prueba</button>
+        </div>
+
+        <!-- SECCIÓN JUEGOS -->
+        <div id="section-juegos" class="glass-card" style="display:none; text-align:center; padding: 50px;">
+            <h1>PRÓXIMAMENTE 🎮</h1>
+            <p>Sección de descarga de juegos optimizados.</p>
+        </div>
     </div>
 
     <script>
         function showSection(section) {
-            document.getElementById('section-home').style.display = 'none';
-            document.getElementById('section-juegos').style.display = 'none';
-            document.getElementById('section-login').style.display = 'none';
-
-            if(section === 'home') document.getElementById('section-home').style.display = 'block';
-            if(section === 'juegos') document.getElementById('section-juegos').style.display = 'block';
-            if(section === 'login') document.getElementById('section-login').style.display = 'flex';
+            const sections = ['home', 'juegos', 'login', 'settings'];
+            sections.forEach(s => document.getElementById('section-' + s).style.display = 'none');
+            document.getElementById('section-' + section).style.display = section === 'login' ? 'block' : 'block';
+            if(section === 'home') showTab('general');
         }
 
-        function simulateLogin() {
-            // Animación simple para simular login
-            alert("¡Sesión iniciada con éxito!");
-            document.getElementById('auth-links').style.display = 'none';
-            document.getElementById('user-profile').style.display = 'flex';
+        function showTab(tab) {
+            document.getElementById('tab-general').style.display = tab === 'general' ? 'block' : 'none';
+            document.getElementById('tab-destacado').style.display = tab === 'destacado' ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleDropdown() {
+            const d = document.getElementById('profile-dropdown');
+            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function saveSettings() {
+            const newName = document.getElementById('edit-name').value;
+            const newBio = document.getElementById('edit-bio').value;
+            document.getElementById('nav-name').innerText = newName;
+            document.getElementById('display-name').innerText = newName;
+            document.getElementById('display-bio').innerText = newBio;
+            alert("Perfil actualizado, we.");
             showSection('home');
         }
 
-        function toggleDiscord() {
-            alert("Discord: ItakitoYT");
+        function addPost() {
+            const text = document.getElementById('post-text').value;
+            if(!text) return;
+            const post = `<div class="feed-item">
+                <div class="avatar-circle" style="background-image: url('https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj');"></div>
+                <div>
+                    <strong>${document.getElementById('nav-name').innerText}</strong>
+                    <p>${text}</p>
+                </div>
+            </div>`;
+            document.getElementById('feed').innerHTML = post + document.getElementById('feed').innerHTML;
+            document.getElementById('post-text').value = "";
         }
 
-        function openLogoModal() { document.getElementById("logoModal").style.display = "flex"; }
-        function closeLogoModal() { document.getElementById("logoModal").style.display = "none"; }
+        function checkHash() {
+            const hash = window.location.hash.replace('#', '');
+            if(hash) showSection(hash);
+        }
+
+        function logout() {
+            location.reload(); // Simulación de cierre
+        }
     </script>
 </body>
 </html>
