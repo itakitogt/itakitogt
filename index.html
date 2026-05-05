@@ -24,7 +24,7 @@
             color: white;
         }
 
-        /* --- NAVBAR & DROPDOWN --- */
+        /* --- NAVBAR --- */
         .navbar {
             width: 100%;
             height: 50px;
@@ -47,262 +47,223 @@
             margin-right: 20px;
             opacity: 0.8;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .nav-links a:hover { opacity: 1; }
 
-        .user-menu-container { position: relative; cursor: pointer; }
-        
-        .logged-in-user {
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 45px;
-            right: 0;
-            background: #18191c;
-            border-radius: 8px;
-            width: 200px;
-            padding: 10px 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px 20px;
-            color: #ddd;
+        .user-section a {
+            color: #5865F2;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 14px;
+            margin-left: 10px;
+            font-weight: bold;
         }
 
-        .dropdown-menu a:hover { background: var(--accent); color: white; }
-
-        /* --- MAIN CARDS --- */
+        /* --- CARDS --- */
         .main-container {
-            margin-top: 60px;
+            margin-top: 70px;
             width: 100%;
             display: flex;
             justify-content: center;
-            height: calc(100vh - 70px);
+            height: calc(100vh - 80px);
             overflow-y: auto;
         }
 
         .glass-card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border-radius: 25px;
             border: 1px solid var(--border);
             width: 90%;
             max-width: 800px;
+            padding: 30px;
+            box-sizing: border-box;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* --- PERFIL SECCIÓN --- */
+        .profile-header {
+            text-align: center;
             margin-bottom: 20px;
-            overflow: hidden;
-            animation: fadeIn 0.5s ease-out;
         }
 
-        .tabs {
-            display: flex;
-            background: rgba(0,0,0,0.2);
-            padding: 10px 20px;
-            gap: 20px;
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            color: white;
-            opacity: 0.6;
-            cursor: pointer;
-            font-weight: bold;
-            padding-bottom: 5px;
-        }
-
-        .tab-btn.active { opacity: 1; border-bottom: 2px solid white; }
-
-        /* --- FEED / TWITTER STYLE --- */
-        .post-box {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            margin: 20px;
-            border-radius: 15px;
-        }
-
-        .post-box textarea {
-            width: 100%;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            resize: none;
-            outline: none;
-        }
-
-        .feed-item {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 20px;
-            display: flex;
-            gap: 15px;
-        }
-
-        .avatar-circle {
-            width: 50px;
-            height: 50px;
+        .large-logo {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            background-size: cover;
+            border: 3px solid white;
+            object-fit: cover;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        /* --- SETTINGS --- */
-        .settings-form { padding: 30px; }
-        .settings-form input, .settings-form textarea {
+        .large-logo:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        .settings-input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
             border-radius: 8px;
             border: 1px solid var(--border);
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.4);
             color: white;
+            font-size: 14px;
         }
+
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .logout-btn { background: #ff4444; color: white; width: 100%; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body onload="checkHash()">
+<body onload="initApp()">
 
     <nav class="navbar">
         <div class="nav-links">
-            <a href="#home" onclick="showSection('home')">Inicio</a>
-            <a href="#juegos" onclick="showSection('juegos')">Juegos</a>
+            <a onclick="showSection('home')">Inicio</a>
+            <a onclick="showSection('juegos')">Juegos</a>
+            <a id="nav-destacados" onclick="showSection('destacados')" style="display:none;">Destacados</a>
         </div>
         
+        <!-- LOGIN / REGISTER (Se ocultan si hay sesión) -->
         <div id="auth-links" class="user-section">
-            <a href="#login" onclick="showSection('login')">Iniciar sesión</a>
-            <a href="#login" onclick="showSection('login')">Registrarse</a>
+            <a onclick="loginSimulado('Google User', 'https://lh3.googleusercontent.com/a/ACg8ocL...')">Iniciar sesión</a>
+            <a onclick="loginSimulado('Nuevo Usuario', 'https://cdn-icons-png.flaticon.com/512/149/149071.png')">Registrarse</a>
         </div>
 
-        <div id="user-profile" class="user-menu-container" onclick="toggleDropdown()">
-            <div class="logged-in-user" style="display: flex;">
-                <img id="nav-avatar" src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" style="width:30px; height:30px; border-radius:50%;">
-                <span id="nav-name" style="font-weight: bold;">ItakitoYT</span>
-            </div>
-            <div id="profile-dropdown" class="dropdown-menu">
-                <a href="#settings" onclick="showSection('settings')">⚙️ Ajustes de Perfil</a>
-                <a href="#home" onclick="logout()">🚪 Cerrar Sesión</a>
-            </div>
+        <!-- PERFIL (Se muestra si hay sesión) -->
+        <div id="user-profile" style="display:none; align-items:center; gap:10px; cursor:pointer;" onclick="showSection('settings')">
+            <span id="nav-name" style="font-weight:bold;"></span>
+            <img id="nav-avatar" src="" style="width:32px; height:32px; border-radius:50%; border:1px solid white;">
         </div>
     </nav>
 
     <div class="main-container">
         
-        <!-- SECCIÓN HOME -->
+        <!-- INICIO -->
         <div id="section-home" class="glass-card">
-            <div class="tabs">
-                <button class="tab-btn active" onclick="showTab('general')">General</button>
-                <button class="tab-btn" onclick="showTab('destacado')">Destacado</button>
-            </div>
+            <h1 id="display-name-home">Itakito_GT</h1>
+            <p id="display-bio-home">DEV de sistemas experto en optimización de Windows e infraestructura de Minecraft.</p>
+        </div>
 
-            <div id="tab-general" class="content-padding" style="padding: 30px;">
-                <h1 id="display-name">Itakito_GT</h1>
-                <p id="display-bio">DEV de sistemas experto en optimización de Windows e infraestructura de Minecraft.</p>
-            </div>
-
-            <div id="tab-destacado" style="display: none;">
-                <div class="post-box">
-                    <textarea id="post-text" placeholder="¿Qué hay de nuevo, we?"></textarea>
-                    <button class="tab-btn" style="background: var(--accent); padding: 8px 20px; border-radius: 20px; opacity: 1;" onclick="addPost()">Publicar</button>
-                </div>
-                <div id="feed">
-                    <div class="feed-item">
-                        <div class="avatar-circle" style="background-image: url('https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj');"></div>
-                        <div>
-                            <strong>ItakitoYT</strong> <span style="opacity:0.5; font-size:12px;">@itakitogt</span>
-                            <p>¡Nuevo **ItaOS LITE** casi listo para la Lenovo G570! 🚀</p>
-                        </div>
-                    </div>
-                </div>
+        <!-- DESTACADOS -->
+        <div id="section-destacados" class="glass-card" style="display:none;">
+            <h2>Publicaciones Destacadas</h2>
+            <div id="feed">
+                <p style="opacity:0.6;">No hay publicaciones nuevas aún...</p>
             </div>
         </div>
 
-        <!-- SECCIÓN AJUSTES -->
+        <!-- PERFIL / AJUSTES -->
         <div id="section-settings" class="glass-card" style="display:none;">
-            <div class="settings-form">
-                <h2>Ajustes de Perfil</h2>
-                <label>Nombre de Usuario</label>
-                <input type="text" id="edit-name" value="ItakitoYT">
-                <label>Descripción</label>
-                <textarea id="edit-bio">DEV de sistemas y optimizador de juegos.</textarea>
-                <button class="tab-btn" style="background: green; padding: 10px 20px; border-radius: 8px; opacity: 1;" onclick="saveSettings()">Guardar Cambios</button>
+            <div class="profile-header">
+                <input type="file" id="file-input" style="display:none;" onchange="changeLogo(this)">
+                <img id="large-logo" class="large-logo" src="" onclick="document.getElementById('file-input').click()" title="Click para cambiar foto">
+                <p style="font-size:12px; opacity:0.7;">Click en la imagen para subir una nueva</p>
             </div>
+            
+            <label>Nombre</label>
+            <input type="text" id="edit-name" class="settings-input">
+            
+            <label>Descripción</label>
+            <textarea id="edit-bio" class="settings-input" rows="3"></textarea>
+            
+            <button class="btn-action" style="background: var(--accent); color:white;" onclick="saveProfile()">Guardar Cambios</button>
+            <button class="btn-action logout-btn" onclick="logout()">Cerrar Sesión</button>
         </div>
 
-        <!-- SECCIÓN LOGIN (OCULTA POR DEFECTO) -->
-        <div id="section-login" style="display:none; color:black;">
-            <!-- (Tu código de Login tipo libro iría aquí para mantener el diseño) -->
-            <button onclick="simulateLogin()" style="padding:20px; cursor:pointer;">Hacer Login de prueba</button>
-        </div>
-
-        <!-- SECCIÓN JUEGOS -->
-        <div id="section-juegos" class="glass-card" style="display:none; text-align:center; padding: 50px;">
+        <!-- JUEGOS -->
+        <div id="section-juegos" class="glass-card" style="display:none; text-align:center;">
             <h1>PRÓXIMAMENTE 🎮</h1>
             <p>Sección de descarga de juegos optimizados.</p>
         </div>
+
     </div>
 
     <script>
-        function showSection(section) {
-            const sections = ['home', 'juegos', 'login', 'settings'];
-            sections.forEach(s => document.getElementById('section-' + s).style.display = 'none');
-            document.getElementById('section-' + section).style.display = section === 'login' ? 'block' : 'block';
-            if(section === 'home') showTab('general');
+        let currentUser = null;
+
+        function initApp() {
+            // Cargar datos de LocalStorage si existen
+            const saved = localStorage.getItem('userSession');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                applySession();
+            }
+            showSection('home');
         }
 
-        function showTab(tab) {
-            document.getElementById('tab-general').style.display = tab === 'general' ? 'block' : 'none';
-            document.getElementById('tab-destacado').style.display = tab === 'destacado' ? 'block' : 'none';
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+        function loginSimulado(name, photo) {
+            currentUser = {
+                name: name,
+                photo: photo,
+                bio: "Usuario de la comunidad Itakito_GT"
+            };
+            localStorage.setItem('userSession', JSON.stringify(currentUser));
+            applySession();
+            showSection('home');
         }
 
-        function toggleDropdown() {
-            const d = document.getElementById('profile-dropdown');
-            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        function applySession() {
+            if (currentUser) {
+                document.getElementById('auth-links').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('nav-destacados').style.display = 'inline';
+                
+                document.getElementById('nav-name').innerText = currentUser.name;
+                document.getElementById('nav-avatar').src = currentUser.photo;
+                document.getElementById('large-logo').src = currentUser.photo;
+                document.getElementById('edit-name').value = currentUser.name;
+                document.getElementById('edit-bio').value = currentUser.bio;
+            }
         }
 
-        function saveSettings() {
-            const newName = document.getElementById('edit-name').value;
-            const newBio = document.getElementById('edit-bio').value;
-            document.getElementById('nav-name').innerText = newName;
-            document.getElementById('display-name').innerText = newName;
-            document.getElementById('display-bio').innerText = newBio;
+        function logout() {
+            localStorage.removeItem('userSession');
+            location.reload(); // Recarga real para limpiar todo
+        }
+
+        function showSection(id) {
+            const sections = ['home', 'juegos', 'destacados', 'settings'];
+            sections.forEach(s => {
+                const el = document.getElementById('section-' + s);
+                if (el) el.style.display = 'none';
+            });
+            document.getElementById('section-' + id).style.display = 'block';
+        }
+
+        function saveProfile() {
+            currentUser.name = document.getElementById('edit-name').value;
+            currentUser.bio = document.getElementById('edit-bio').value;
+            localStorage.setItem('userSession', JSON.stringify(currentUser));
+            
+            document.getElementById('nav-name').innerText = currentUser.name;
             alert("Perfil actualizado, we.");
             showSection('home');
         }
 
-        function addPost() {
-            const text = document.getElementById('post-text').value;
-            if(!text) return;
-            const post = `<div class="feed-item">
-                <div class="avatar-circle" style="background-image: url('https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj');"></div>
-                <div>
-                    <strong>${document.getElementById('nav-name').innerText}</strong>
-                    <p>${text}</p>
-                </div>
-            </div>`;
-            document.getElementById('feed').innerHTML = post + document.getElementById('feed').innerHTML;
-            document.getElementById('post-text').value = "";
-        }
-
-        function checkHash() {
-            const hash = window.location.hash.replace('#', '');
-            if(hash) showSection(hash);
-        }
-
-        function logout() {
-            location.reload(); // Simulación de cierre
+        function changeLogo(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newPhoto = e.target.result;
+                    document.getElementById('large-logo').src = newPhoto;
+                    document.getElementById('nav-avatar').src = newPhoto;
+                    currentUser.photo = newPhoto;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 </body>
