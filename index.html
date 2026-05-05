@@ -9,6 +9,7 @@
             --glass: rgba(255, 255, 255, 0.15);
             --border: rgba(255, 255, 255, 0.3);
             --accent: #5865F2;
+            --admin: #ff4757;
         }
 
         body {
@@ -19,12 +20,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            font-family: 'SF Pro Display', sans-serif;
             overflow: hidden;
             color: white;
         }
 
-        /* --- NAVBAR --- */
         .navbar {
             width: 100%;
             height: 50px;
@@ -40,89 +40,38 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            margin-right: 20px;
-            opacity: 0.8;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
+        .nav-links a { color: white; text-decoration: none; font-size: 14px; margin-right: 20px; cursor: pointer; opacity: 0.8; }
         .nav-links a:hover { opacity: 1; }
 
-        .user-section a {
-            color: #5865F2;
-            text-decoration: none;
-            font-size: 14px;
-            margin-left: 10px;
-            font-weight: bold;
-        }
-
-        /* --- CARDS --- */
-        .main-container {
-            margin-top: 70px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-        }
+        .main-container { margin-top: 60px; width: 100%; display: flex; justify-content: center; height: calc(100vh - 70px); overflow-y: auto; }
 
         .glass-card {
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
             border-radius: 25px;
             border: 1px solid var(--border);
             width: 90%;
             max-width: 800px;
-            padding: 30px;
-            box-sizing: border-box;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        /* --- PERFIL SECCIÓN --- */
-        .profile-header {
-            text-align: center;
             margin-bottom: 20px;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .large-logo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid white;
-            object-fit: cover;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: 0.3s;
+        /* --- LOGIN FORM --- */
+        .auth-form { padding: 40px; text-align: center; }
+        .auth-form input {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
+            border: 1px solid var(--border); background: rgba(0,0,0,0.5); color: white;
         }
 
-        .large-logo:hover { transform: scale(1.05); filter: brightness(1.1); }
+        /* --- UI ELEMENTS --- */
+        .badge { background: var(--admin); padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-left: 5px; }
+        .banner { width: 100%; height: 120px; background: linear-gradient(90deg, #1e1e2e, #5865F2); }
+        .profile-pic-container { margin-top: -50px; text-align: center; }
+        .main-logo { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #1e1e2e; background: white; }
 
-        .settings-input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: rgba(0,0,0,0.4);
-            color: white;
-            font-size: 14px;
-        }
-
-        .btn-action {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .logout-btn { background: #ff4444; color: white; width: 100%; }
+        .feed-item img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
+        .btn-action { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -133,137 +82,130 @@
         <div class="nav-links">
             <a onclick="showSection('home')">Inicio</a>
             <a onclick="showSection('juegos')">Juegos</a>
-            <a id="nav-destacados" onclick="showSection('destacados')" style="display:none;">Destacados</a>
+            <a onclick="showSection('destacados')">Destacados</a>
         </div>
-        
-        <!-- LOGIN / REGISTER (Se ocultan si hay sesión) -->
-        <div id="auth-links" class="user-section">
-            <a onclick="loginSimulado('Google User', 'https://lh3.googleusercontent.com/a/ACg8ocL...')">Iniciar sesión</a>
-            <a onclick="loginSimulado('Nuevo Usuario', 'https://cdn-icons-png.flaticon.com/512/149/149071.png')">Registrarse</a>
-        </div>
-
-        <!-- PERFIL (Se muestra si hay sesión) -->
         <div id="user-profile" style="display:none; align-items:center; gap:10px; cursor:pointer;" onclick="showSection('settings')">
             <span id="nav-name" style="font-weight:bold;"></span>
-            <img id="nav-avatar" src="" style="width:32px; height:32px; border-radius:50%; border:1px solid white;">
+            <img id="nav-avatar" src="" style="width:30px; height:30px; border-radius:50%; border:1px solid white;">
         </div>
     </nav>
 
     <div class="main-container">
         
+        <!-- LOGIN / REGISTRO -->
+        <div id="section-auth" class="glass-card auth-form">
+            <h2>Acceso a la Comunidad</h2>
+            <input type="email" id="auth-email" placeholder="Correo electrónico">
+            <input type="password" id="auth-pass" placeholder="Contraseña">
+            <button class="btn-action" onclick="handleAuth()">Entrar / Registrarse</button>
+            <p style="font-size: 12px; opacity: 0.6; margin-top: 15px;">Usa tu correo para guardar tu progreso, we.</p>
+        </div>
+
         <!-- INICIO -->
-        <div id="section-home" class="glass-card">
-            <h1 id="display-name-home">Itakito_GT</h1>
-            <p id="display-bio-home">DEV de sistemas experto en optimización de Windows e infraestructura de Minecraft.</p>
+        <div id="section-home" class="glass-card" style="display:none;">
+            <div class="banner"></div>
+            <div class="profile-pic-container">
+                <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" class="main-logo">
+                <h1>Itakito_GT <span class="badge">OWNER</span></h1>
+                <p style="padding: 0 40px; opacity: 0.8;">DEV de sistemas experto en optimización de Windows e infraestructura de Minecraft.</p>
+            </div>
         </div>
 
         <!-- DESTACADOS -->
-        <div id="section-destacados" class="glass-card" style="display:none;">
-            <h2>Publicaciones Destacadas</h2>
-            <div id="feed">
-                <p style="opacity:0.6;">No hay publicaciones nuevas aún...</p>
+        <div id="section-destacados" class="glass-card" style="display:none; padding: 20px;">
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; margin-bottom: 20px;">
+                <textarea id="post-text" placeholder="Escribe algo (puedes usar <b>negrita</b> o <img>)..." style="width:100%; background:none; border:none; color:white; outline:none; height:80px;"></textarea>
+                <button class="btn-action" style="width: auto; float: right;" onclick="addPost()">Publicar</button>
+                <div style="clear:both;"></div>
             </div>
+            <div id="feed"></div>
         </div>
 
-        <!-- PERFIL / AJUSTES -->
-        <div id="section-settings" class="glass-card" style="display:none;">
-            <div class="profile-header">
-                <input type="file" id="file-input" style="display:none;" onchange="changeLogo(this)">
-                <img id="large-logo" class="large-logo" src="" onclick="document.getElementById('file-input').click()" title="Click para cambiar foto">
-                <p style="font-size:12px; opacity:0.7;">Click en la imagen para subir una nueva</p>
-            </div>
-            
-            <label>Nombre</label>
-            <input type="text" id="edit-name" class="settings-input">
-            
-            <label>Descripción</label>
-            <textarea id="edit-bio" class="settings-input" rows="3"></textarea>
-            
-            <button class="btn-action" style="background: var(--accent); color:white;" onclick="saveProfile()">Guardar Cambios</button>
-            <button class="btn-action logout-btn" onclick="logout()">Cerrar Sesión</button>
+        <!-- AJUSTES -->
+        <div id="section-settings" class="glass-card" style="display:none; padding: 30px;">
+            <center>
+                <img id="large-logo" src="" style="width:120px; height:120px; border-radius:50%; border:3px solid var(--accent);">
+                <h2 id="settings-title">Ajustes</h2>
+            </center>
+            <button class="btn-action" style="background:#ff4444;" onclick="logout()">Cerrar Sesión</button>
         </div>
-
-        <!-- JUEGOS -->
-        <div id="section-juegos" class="glass-card" style="display:none; text-align:center;">
-            <h1>PRÓXIMAMENTE 🎮</h1>
-            <p>Sección de descarga de juegos optimizados.</p>
-        </div>
-
     </div>
 
     <script>
         let currentUser = null;
+        const ADMIN_EMAIL = "jugandoconitakito@gmail.com";
+        const prohibitedWords = ["puta", "mierda", "pendejo", "idiota"];
 
         function initApp() {
-            // Cargar datos de LocalStorage si existen
             const saved = localStorage.getItem('userSession');
             if (saved) {
                 currentUser = JSON.parse(saved);
                 applySession();
+                showSection('home');
+            } else {
+                showSection('auth');
             }
-            showSection('home');
         }
 
-        function loginSimulado(name, photo) {
-            currentUser = {
-                name: name,
-                photo: photo,
-                bio: "Usuario de la comunidad Itakito_GT"
-            };
+        function handleAuth() {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+
+            if(!email || !pass) return alert("Llena todo, we.");
+
+            // PROTECCIÓN DE ADMIN
+            if (email.toLowerCase() === ADMIN_EMAIL) {
+                currentUser = { 
+                    name: "ItakitoYTblox", 
+                    photo: "https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj",
+                    role: "ADMINISTRADOR",
+                    email: email
+                };
+            } else {
+                currentUser = { 
+                    name: email.split('@')[0], 
+                    photo: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                    role: "USER",
+                    email: email
+                };
+            }
+
             localStorage.setItem('userSession', JSON.stringify(currentUser));
             applySession();
             showSection('home');
         }
 
         function applySession() {
-            if (currentUser) {
-                document.getElementById('auth-links').style.display = 'none';
-                document.getElementById('user-profile').style.display = 'flex';
-                document.getElementById('nav-destacados').style.display = 'inline';
-                
-                document.getElementById('nav-name').innerText = currentUser.name;
-                document.getElementById('nav-avatar').src = currentUser.photo;
-                document.getElementById('large-logo').src = currentUser.photo;
-                document.getElementById('edit-name').value = currentUser.name;
-                document.getElementById('edit-bio').value = currentUser.bio;
-            }
+            document.getElementById('user-profile').style.display = 'flex';
+            document.getElementById('nav-name').innerHTML = currentUser.name + (currentUser.role === "ADMINISTRADOR" ? ' <span class="badge">ADMIN</span>' : '');
+            document.getElementById('nav-avatar').src = currentUser.photo;
+            document.getElementById('large-logo').src = currentUser.photo;
         }
 
-        function logout() {
-            localStorage.removeItem('userSession');
-            location.reload(); // Recarga real para limpiar todo
+        function addPost() {
+            let text = document.getElementById('post-text').value;
+            if(!text) return;
+
+            // Filtro de toxicidad
+            if(prohibitedWords.some(w => text.toLowerCase().includes(w))) {
+                return alert("Nada de insultos, we.");
+            }
+
+            const post = `
+                <div class="feed-item" style="padding:15px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <strong>${currentUser.name}</strong> ${currentUser.role === "ADMINISTRADOR" ? '<span class="badge">ADMIN</span>' : ''}
+                    <div style="margin-top:5px; opacity:0.9;">${text}</div>
+                </div>`;
+            document.getElementById('feed').innerHTML = post + document.getElementById('feed').innerHTML;
+            document.getElementById('post-text').value = "";
         }
+
+        function logout() { localStorage.removeItem('userSession'); location.reload(); }
 
         function showSection(id) {
-            const sections = ['home', 'juegos', 'destacados', 'settings'];
-            sections.forEach(s => {
-                const el = document.getElementById('section-' + s);
-                if (el) el.style.display = 'none';
+            ['home', 'juegos', 'destacados', 'settings', 'auth'].forEach(s => {
+                document.getElementById('section-' + s).style.display = (s === id ? 'block' : 'none');
             });
-            document.getElementById('section-' + id).style.display = 'block';
-        }
-
-        function saveProfile() {
-            currentUser.name = document.getElementById('edit-name').value;
-            currentUser.bio = document.getElementById('edit-bio').value;
-            localStorage.setItem('userSession', JSON.stringify(currentUser));
-            
-            document.getElementById('nav-name').innerText = currentUser.name;
-            alert("Perfil actualizado, we.");
-            showSection('home');
-        }
-
-        function changeLogo(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const newPhoto = e.target.result;
-                    document.getElementById('large-logo').src = newPhoto;
-                    document.getElementById('nav-avatar').src = newPhoto;
-                    currentUser.photo = newPhoto;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
         }
     </script>
 </body>
