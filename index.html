@@ -3,250 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itakito_GT | Community</title>
+    <title>Itakito_GT | Community OS</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.1);
             --mac-bg: #1e1e1e;
             --mac-header: #323232;
             --accent: #5865F2;
-            --border: rgba(255, 255, 255, 0.2);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
             background: url('https://www.10wallpaper.com/wallpaper/1366x768/1508/sardinia_italy-Landscape_wallpaper_1366x768.jpg') no-repeat center center fixed;
             background-size: cover;
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0; font-family: 'Segoe UI', sans-serif; color: white;
+            display: flex; flex-direction: column; align-items: center; height: 100vh;
         }
 
-        /* --- NAVBAR --- */
-        .navbar {
-            width: 100%; height: 50px; background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px); display: flex; justify-content: space-between;
-            align-items: center; padding: 0 20px; position: fixed; top: 0; z-index: 1000;
-            border-bottom: 1px solid var(--accent); box-sizing: border-box;
+        /* --- LOGIN CORREGIDO (Contraseña arriba, Email abajo) --- */
+        #tab-login {
+            margin-top: 100px; text-align: center; background: rgba(0,0,0,0.85); 
+            padding: 40px; border-radius: 20px; border: 1px solid var(--accent); width: 300px;
+            backdrop-filter: blur(10px);
+        }
+        #tab-login input {
+            display: block; width: 100%; margin: 15px 0; padding: 12px; 
+            background: #222; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box;
         }
 
-        .nav-links div { cursor: pointer; font-weight: bold; font-size: 13px; opacity: 0.8; transition: 0.3s; margin-right: 20px; display: inline-block; }
-        .nav-links div:hover { opacity: 1; color: var(--accent); }
-
-        /* --- VENTANA ESTILO MAC --- */
+        /* --- VENTANA MAC --- */
         .mac-window {
-            background: var(--mac-bg);
-            width: 90%; max-width: 800px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            margin-top: 80px;
-            border: 1px solid var(--border);
-            display: none;
-            animation: fadeIn 0.3s ease;
+            background: var(--mac-bg); width: 90%; max-width: 800px;
+            border-radius: 12px; margin-top: 80px; border: 1px solid var(--border);
+            display: none; flex-direction: column; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
-
-        .mac-header {
-            background: var(--mac-header);
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .mac-header { background: var(--mac-header); padding: 12px; display: flex; align-items: center; gap: 8px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
         .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+        .mac-content { padding: 25px; max-height: 75vh; overflow-y: auto; }
 
-        .mac-content { padding: 20px; max-height: 70vh; overflow-y: auto; }
+        /* --- PERFIL CON CAMBIO DE IMAGEN --- */
+        .profile-area { text-align: center; padding: 20px; }
+        .pfp-container { position: relative; width: 120px; height: 120px; margin: 0 auto; cursor: pointer; }
+        .pfp-main { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; }
+        .pfp-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; opacity: 0; transition: 0.3s;
+            font-size: 12px; font-weight: bold;
+        }
+        .pfp-container:hover .pfp-overlay { opacity: 1; }
 
         /* --- EDITOR DE POSTS --- */
-        .post-box { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .post-editor { background: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
         .toolbar { display: flex; gap: 10px; margin-bottom: 10px; }
-        .toolbar button { background: #444; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .toolbar button { background: #444; border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
         .toolbar button:hover { background: var(--accent); }
-        textarea { width: 100%; background: transparent; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; resize: none; box-sizing: border-box; }
+        textarea { 
+            width: 100%; height: 80px; background: #1a1a1a; border: 1px solid #333; 
+            color: white; padding: 12px; border-radius: 8px; resize: none; box-sizing: border-box;
+        }
 
-        /* --- POSTS --- */
-        .post { background: #252525; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
-        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .post-pfp { width: 35px; height: 35px; border-radius: 50%; }
-        .post-body { font-size: 14px; margin-bottom: 10px; }
-        .post-footer { display: flex; gap: 15px; font-size: 12px; color: #aaa; cursor: pointer; }
-        .badge { background: #ff4757; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+        /* --- POSTS Y COMENTARIOS --- */
+        .post { background: #252525; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .post-footer { display: flex; gap: 20px; font-size: 13px; color: #888; margin-top: 10px; }
+        .btn-action { cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .btn-action:hover { color: var(--accent); }
 
-        /* --- COMENTARIOS --- */
-        .comment-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #333; display: none; }
-        .comment { font-size: 13px; background: #1a1a1a; padding: 8px; border-radius: 5px; margin-bottom: 5px; }
-        .reply-input { display: flex; gap: 5px; margin-top: 10px; }
-        .reply-input input { flex: 1; background: #333; border: none; color: white; padding: 5px; border-radius: 4px; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .comment-box { 
+            background: #1a1a1a; margin-top: 15px; padding: 15px; border-radius: 8px; 
+            display: none; animation: fadeIn 0.3s ease;
+        }
+        .comment-input-row { display: flex; gap: 10px; }
+        .comment-input-row input { flex: 1; background: #333; border: none; color: white; padding: 8px; border-radius: 4px; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body onload="checkLogin()">
 
-    <nav class="navbar" id="nav-bar" style="display:none;">
-        <div class="nav-links">
-            <div onclick="showTab('home')"> INICIO</div>
-            <div onclick="showTab('destacados')">FEED</div>
-            <div onclick="showTab('config')">PERFIL</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <span id="user-nav-name" style="font-size:12px;"></span>
-            <img id="user-nav-pfp" src="" style="width:30px; height:30px; border-radius:50%;">
-        </div>
-    </nav>
+    <div id="tab-login">
+        <h2 style="margin-bottom: 25px;">Inicia Sesión</h2>
+        <input type="password" id="login-pass" placeholder="Contraseña">
+        <input type="email" id="login-mail" placeholder="Email">
+        <button onclick="login()" style="background:var(--accent); color:white; border:none; width:100%; padding:12px; border-radius:8px; cursor:pointer; font-weight:bold;">ENTRAR</button>
+    </div>
 
     <div id="main-window" class="mac-window">
         <div class="mac-header">
-            <div class="dot red"></div>
-            <div class="dot yellow"></div>
-            <div class="dot green"></div>
-            <span style="margin-left: 10px; font-size: 12px; opacity: 0.5;">Itakito_OS Terminal</span>
+            <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+            <span style="font-size:12px; margin-left:10px; opacity:0.6;">Itakito_GT Terminal v1.0</span>
+            <div style="margin-left:auto; display:flex; gap:15px; font-size:12px;">
+                <span onclick="showTab('home')" style="cursor:pointer;">INICIO</span>
+                <span onclick="showTab('feed')" style="cursor:pointer;">FEED</span>
+                <span onclick="showTab('config')" style="cursor:pointer;">PERFIL</span>
+            </div>
         </div>
-        
+
         <div class="mac-content">
-            <div id="tab-home" style="display:none; text-align: center;">
-                <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" style="width:100px; border-radius:50%; border:3px solid var(--accent);">
-                <h1>Bienvenido a la Terminal</h1>
-                <p>Aquí puedes ver los últimos posts y novedades del servidor.</p>
-                <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
-                <div id="home-feed">
-                    </div>
+            <div id="tab-home" style="display:none;">
+                <div id="home-posts"></div>
             </div>
 
-            <div id="tab-destacados" style="display:none;">
-                <div class="post-box">
+            <div id="tab-feed" style="display:none;">
+                <div class="post-editor">
                     <div class="toolbar">
-                        <button onclick="addTag('b')"><b>B</b></button>
-                        <button onclick="addTag('i')"><i>I</i></button>
-                        <button onclick="alert('Arrastra o pega la URL de la imagen en el texto, we.')">🖼️ Imagen</button>
+                        <button onclick="wrapText('b')"><b>N</b></button>
+                        <button onclick="wrapText('i')"><i>K</i></button>
+                        <button onclick="document.getElementById('img-upload').click()">🖼️ Subir</button>
+                        <input type="file" id="img-upload" hidden accept="image/*" onchange="handleImage(this, 'post')">
                     </div>
-                    <textarea id="post-text" placeholder="¿Qué estás desarrollando hoy, we?"></textarea>
-                    <button onclick="createPost()" style="margin-top:10px; background:var(--accent); border:none; color:white; padding:8px 20px; border-radius:5px; cursor:pointer; width:100%;">PUBLICAR EN EL MURO</button>
+                    <textarea id="post-input" placeholder="¿Qué cuentas, we?"></textarea>
+                    <button onclick="createPost()" style="width:100%; margin-top:10px; background:var(--accent); border:none; color:white; padding:10px; border-radius:5px; cursor:pointer;">PUBLICAR</button>
                 </div>
                 <div id="global-feed"></div>
             </div>
 
-            <div id="tab-config" style="display:none; text-align: center;">
-                <h2 id="profile-name"></h2>
-                <button onclick="logout()" style="background:#ff4757; border:none; color:white; padding:10px 20px; border-radius:5px; cursor:pointer;">CERRAR SESIÓN</button>
+            <div id="tab-config" class="profile-area" style="display:none;">
+                <div class="pfp-container" onclick="document.getElementById('pfp-upload').click()">
+                    <img id="my-pfp" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="pfp-main">
+                    <div class="pfp-overlay">CAMBIAR</div>
+                </div>
+                <input type="file" id="pfp-upload" hidden accept="image/*" onchange="handleImage(this, 'profile')">
+                <h2 id="my-name" style="margin-top:15px;"></h2>
+                <button onclick="logout()" style="background:#ff4757; border:none; color:white; padding:10px 20px; border-radius:5px; cursor:pointer; margin-top:20px;">CERRAR SESIÓN</button>
             </div>
         </div>
     </div>
 
-    <div id="tab-login" style="margin-top:100px; text-align:center; background:rgba(0,0,0,0.8); padding:30px; border-radius:15px; border:1px solid var(--accent);">
-        <h2>Inicia Sesión</h2>
-        <input type="text" id="login-mail" placeholder="Email" style="display:block; width:200px; margin:10px auto; padding:8px;"><br>
-        <button onclick="login()" style="background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">ENTRAR</button>
-    </div>
-
     <script>
-        let currentUser = null;
-
-        function showTab(tabId) {
-            ['home', 'destacados', 'config'].forEach(id => {
-                document.getElementById('tab-' + id).style.display = 'none';
-            });
-            document.getElementById('tab-' + tabId).style.display = 'block';
-        }
-
-        function checkLogin() {
-            const session = localStorage.getItem('itakito_session');
-            if(session) {
-                currentUser = JSON.parse(session);
-                initUI();
-            }
-        }
+        let user = null;
 
         function login() {
             const mail = document.getElementById('login-mail').value;
-            if(!mail) return alert("Pon tu mail, we.");
-            
-            currentUser = {
-                name: mail.split('@')[0],
-                pfp: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-                isAdmin: mail === "jugandoconitakito@gmail.com"
-            };
-            
-            localStorage.setItem('itakito_session', JSON.stringify(currentUser));
+            if(!mail) return alert("Pon tu email, we");
+            user = { name: mail.split('@')[0], pfp: "https://cdn-icons-png.flaticon.com/512/149/149071.png" };
+            localStorage.setItem('ita_session', JSON.stringify(user));
             initUI();
+        }
+
+        function checkLogin() {
+            const saved = localStorage.getItem('ita_session');
+            if(saved) { user = JSON.parse(saved); initUI(); }
         }
 
         function initUI() {
             document.getElementById('tab-login').style.display = 'none';
-            document.getElementById('main-window').style.display = 'block';
-            document.getElementById('nav-bar').style.display = 'flex';
-            document.getElementById('user-nav-name').innerText = currentUser.name;
-            document.getElementById('user-nav-pfp').src = currentUser.pfp;
-            document.getElementById('profile-name').innerText = currentUser.name;
+            document.getElementById('main-window').style.display = 'flex';
+            document.getElementById('my-name').innerText = user.name;
+            document.getElementById('my-pfp').src = user.pfp;
             showTab('home');
         }
 
-        function addTag(tag) {
-            const area = document.getElementById('post-text');
-            area.value += `<${tag}></${tag}>`;
-            area.focus();
+        function showTab(id) {
+            ['home', 'feed', 'config'].forEach(t => document.getElementById('tab-'+t).style.display = 'none');
+            document.getElementById('tab-'+id).style.display = 'block';
         }
 
-        function createPost() {
-            const text = document.getElementById('post-text').value;
-            if(!text) return;
+        // --- ARREGLO DE FORMATO (Negrita/Cursiva) ---
+        function wrapText(tag) {
+            const el = document.getElementById('post-input');
+            const start = el.selectionStart;
+            const end = el.selectionEnd;
+            const text = el.value;
+            el.value = text.substring(0, start) + `<${tag}>` + text.substring(start, end) + `</${tag}>` + text.substring(end);
+            el.focus();
+        }
 
-            const postId = Date.now();
-            const postHTML = `
-                <div class="post" id="post-${postId}">
-                    <div class="post-header">
-                        <img src="${currentUser.pfp}" class="post-pfp">
-                        <strong>${currentUser.name}</strong> ${currentUser.isAdmin ? '<span class="badge">OWNER</span>' : ''}
+        // --- MANEJO DE IMÁGENES (Subir desde Galería) ---
+        function handleImage(input, type) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if(type === 'profile') {
+                    user.pfp = e.target.result;
+                    document.getElementById('my-pfp').src = e.target.result;
+                    localStorage.setItem('ita_session', JSON.stringify(user));
+                } else {
+                    document.getElementById('post-input').value += `<img src="${e.target.result}" style="max-width:100%; border-radius:8px; margin-top:10px;">`;
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        // --- SISTEMA DE POSTS Y COMENTARIOS CORREGIDO ---
+        function createPost() {
+            const content = document.getElementById('post-input').value;
+            if(!content) return;
+            const id = Date.now();
+            const html = `
+                <div class="post">
+                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                        <img src="${user.pfp}" style="width:30px; height:30px; border-radius:50%;">
+                        <strong>${user.name}</strong>
                     </div>
-                    <div class="post-body">${text}</div>
+                    <div>${content}</div>
                     <div class="post-footer">
-                        <span onclick="toggleComments(${postId})">💬 <span id="count-${postId}">0</span> Comentarios</span>
-                        <span>🚀 Compartir</span>
+                        <div class="btn-action" onclick="toggleComments(${id})">💬 <span id="count-${id}">0</span> Comentarios</div>
                     </div>
-                    <div class="comment-section" id="comments-${postId}">
-                        <div id="list-${postId}"></div>
-                        <div class="reply-input">
-                            <input type="text" id="input-${postId}" placeholder="Escribe un comentario...">
-                            <button onclick="addComment(${postId})" style="background:var(--accent); border:none; color:white; border-radius:4px; padding:0 10px; cursor:pointer;">➔</button>
+                    <div class="comment-box" id="box-${id}">
+                        <div id="list-${id}" style="margin-bottom:10px; font-size:13px;"></div>
+                        <div class="comment-input-row">
+                            <input type="text" id="in-${id}" placeholder="Escribe un comentario...">
+                            <button onclick="addComment(${id})" style="background:var(--accent); color:white; border:none; padding:5px 15px; border-radius:4px; cursor:pointer;">Comentar</button>
                         </div>
                     </div>
-                </div>
-            `;
-
-            document.getElementById('global-feed').innerHTML = postHTML + document.getElementById('global-feed').innerHTML;
-            document.getElementById('home-feed').innerHTML = postHTML + document.getElementById('home-feed').innerHTML;
-            document.getElementById('post-text').value = "";
+                </div>`;
+            document.getElementById('global-feed').insertAdjacentHTML('afterbegin', html);
+            document.getElementById('home-posts').insertAdjacentHTML('afterbegin', html);
+            document.getElementById('post-input').value = "";
         }
 
         function toggleComments(id) {
-            const section = document.getElementById('comments-' + id);
-            section.style.display = section.style.display === 'block' ? 'none' : 'block';
+            const box = document.getElementById('box-'+id);
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
         }
 
         function addComment(id) {
-            const input = document.getElementById('input-' + id);
-            const list = document.getElementById('list-' + id);
-            const countLabel = document.getElementById('count-' + id);
-            
+            const input = document.getElementById('in-'+id);
+            const list = document.getElementById('list-'+id);
+            const count = document.getElementById('count-'+id);
             if(!input.value) return;
-
-            const newComment = document.createElement('div');
-            newComment.className = 'comment';
-            newComment.innerHTML = `<strong>${currentUser.name}:</strong> ${input.value}`;
-            list.appendChild(newComment);
-
-            countLabel.innerText = parseInt(countLabel.innerText) + 1;
+            list.innerHTML += `<div style="margin-top:5px;"><strong>${user.name}:</strong> ${input.value}</div>`;
+            count.innerText = parseInt(count.innerText) + 1;
             input.value = "";
         }
 
-        function logout() {
-            localStorage.removeItem('itakito_session');
-            location.reload();
-        }
+        function logout() { localStorage.removeItem('ita_session'); location.reload(); }
     </script>
 </body>
 </html>
