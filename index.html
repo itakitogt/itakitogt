@@ -3,241 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itakito_GT | Profile</title>
+    <title>Itakito_GT | Community</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.15);
-            --border: rgba(255, 255, 255, 0.3);
+            --glass: rgba(255, 255, 255, 0.1);
+            --mac-bg: #1e1e1e;
+            --mac-header: #323232;
             --accent: #5865F2;
-            --admin: #ff4757;
+            --border: rgba(255, 255, 255, 0.2);
         }
 
         body {
             background: url('https://www.10wallpaper.com/wallpaper/1366x768/1508/sardinia_italy-Landscape_wallpaper_1366x768.jpg') no-repeat center center fixed;
             background-size: cover;
-            height: 100vh;
             margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            color: white;
         }
 
-        /* --- NAVBAR FUNCIONAL --- */
+        /* --- NAVBAR --- */
         .navbar {
-            width: 100%;
-            height: 55px;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            z-index: 3000;
-            padding: 0 20px;
-            box-sizing: border-box;
-            border-bottom: 2px solid var(--accent);
+            width: 100%; height: 50px; background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px); display: flex; justify-content: space-between;
+            align-items: center; padding: 0 20px; position: fixed; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--accent); box-sizing: border-box;
         }
 
-        .nav-links div {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            margin-right: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            opacity: 0.8;
-            transition: 0.3s;
-        }
-
+        .nav-links div { cursor: pointer; font-weight: bold; font-size: 13px; opacity: 0.8; transition: 0.3s; margin-right: 20px; display: inline-block; }
         .nav-links div:hover { opacity: 1; color: var(--accent); }
 
-        .main-container { 
-            margin-top: 70px; 
-            width: 100%; 
-            display: flex; 
-            justify-content: center; 
-            height: calc(100vh - 80px); 
-            overflow-y: auto; 
-        }
-
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border-radius: 20px;
+        /* --- VENTANA ESTILO MAC --- */
+        .mac-window {
+            background: var(--mac-bg);
+            width: 90%; max-width: 800px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-top: 80px;
             border: 1px solid var(--border);
-            width: 90%;
-            max-width: 700px;
-            margin-bottom: 30px;
-            display: none; /* Se controla por JS */
-            animation: fadeIn 0.4s ease;
+            display: none;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* --- AUTH --- */
-        .auth-box { padding: 40px; text-align: center; display: block; }
-        .auth-box input {
-            width: 80%; padding: 12px; margin: 10px 0; border-radius: 8px;
-            border: 1px solid var(--border); background: rgba(0,0,0,0.4); color: white;
+        .mac-header {
+            background: var(--mac-header);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .badge { background: var(--admin); padding: 3px 8px; border-radius: 5px; font-size: 11px; vertical-align: middle; }
-        
-        .banner { width: 100%; height: 140px; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
-        .profile-header { text-align: center; margin-top: -60px; padding-bottom: 20px; }
-        .pfp { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #1e1e2e; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
 
-        .feed-item { padding: 15px; border-bottom: 1px solid var(--border); }
-        .feed-item img { max-width: 100%; border-radius: 10px; margin-top: 10px; display: block; }
+        .mac-content { padding: 20px; max-height: 70vh; overflow-y: auto; }
 
-        .btn-blue { 
-            background: var(--accent); color: white; border: none; padding: 12px 25px; 
-            border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
-        .btn-blue:hover { transform: scale(1.05); background: #4752c4; }
+        /* --- EDITOR DE POSTS --- */
+        .post-box { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .toolbar { display: flex; gap: 10px; margin-bottom: 10px; }
+        .toolbar button { background: #444; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .toolbar button:hover { background: var(--accent); }
+        textarea { width: 100%; background: transparent; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; resize: none; box-sizing: border-box; }
+
+        /* --- POSTS --- */
+        .post { background: #252525; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .post-pfp { width: 35px; height: 35px; border-radius: 50%; }
+        .post-body { font-size: 14px; margin-bottom: 10px; }
+        .post-footer { display: flex; gap: 15px; font-size: 12px; color: #aaa; cursor: pointer; }
+        .badge { background: #ff4757; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+
+        /* --- COMENTARIOS --- */
+        .comment-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid #333; display: none; }
+        .comment { font-size: 13px; background: #1a1a1a; padding: 8px; border-radius: 5px; margin-bottom: 5px; }
+        .reply-input { display: flex; gap: 5px; margin-top: 10px; }
+        .reply-input input { flex: 1; background: #333; border: none; color: white; padding: 5px; border-radius: 4px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body onload="checkLogin()">
 
-    <!-- BARRA DE NAVEGACIÓN -->
     <nav class="navbar" id="nav-bar" style="display:none;">
         <div class="nav-links">
-            <div onclick="showTab('home')">INICIO</div>
-            <div onclick="showTab('destacados')">DESTACADOS</div>
-            <div onclick="showTab('juegos')">JUEGOS</div>
+            <div onclick="showTab('home')"> INICIO</div>
+            <div onclick="showTab('destacados')">FEED</div>
+            <div onclick="showTab('config')">PERFIL</div>
         </div>
-        <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="showTab('config')">
-            <span id="user-name-nav" style="font-size:14px;"></span>
-            <img id="user-pfp-nav" src="" style="width:35px; height:35px; border-radius:50%; border:1px solid white;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span id="user-nav-name" style="font-size:12px;"></span>
+            <img id="user-nav-pfp" src="" style="width:30px; height:30px; border-radius:50%;">
         </div>
     </nav>
 
-    <div class="main-container">
+    <div id="main-window" class="mac-window">
+        <div class="mac-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+            <span style="margin-left: 10px; font-size: 12px; opacity: 0.5;">Itakito_OS Terminal</span>
+        </div>
         
-        <!-- PANTALLA DE LOGIN -->
-        <div id="tab-login" class="glass-card auth-box">
-            <h2>Comunidad Itakito_GT</h2>
-            <p>Ingresa para interactuar</p>
-            <input type="email" id="email" placeholder="Correo electrónico">
-            <input type="password" id="pass" placeholder="Contraseña">
-            <br><br>
-            <button class="btn-blue" onclick="login()">ENTRAR / REGISTRARSE</button>
-        </div>
+        <div class="mac-content">
+            <div id="tab-home" style="display:none; text-align: center;">
+                <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" style="width:100px; border-radius:50%; border:3px solid var(--accent);">
+                <h1>Bienvenido a la Terminal</h1>
+                <p>Aquí puedes ver los últimos posts y novedades del servidor.</p>
+                <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+                <div id="home-feed">
+                    </div>
+            </div>
 
-        <!-- SECCIÓN INICIO -->
-        <div id="tab-home" class="glass-card">
-            <div class="banner"></div>
-            <div class="profile-header">
-                <img src="https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj" class="pfp">
-                <h1>Itakito_GT <span class="badge">OWNER</span></h1>
-                <p>Especialista en ItaOS Lite y Minecraft Dev</p>
+            <div id="tab-destacados" style="display:none;">
+                <div class="post-box">
+                    <div class="toolbar">
+                        <button onclick="addTag('b')"><b>B</b></button>
+                        <button onclick="addTag('i')"><i>I</i></button>
+                        <button onclick="alert('Arrastra o pega la URL de la imagen en el texto, we.')">🖼️ Imagen</button>
+                    </div>
+                    <textarea id="post-text" placeholder="¿Qué estás desarrollando hoy, we?"></textarea>
+                    <button onclick="createPost()" style="margin-top:10px; background:var(--accent); border:none; color:white; padding:8px 20px; border-radius:5px; cursor:pointer; width:100%;">PUBLICAR EN EL MURO</button>
+                </div>
+                <div id="global-feed"></div>
+            </div>
+
+            <div id="tab-config" style="display:none; text-align: center;">
+                <h2 id="profile-name"></h2>
+                <button onclick="logout()" style="background:#ff4757; border:none; color:white; padding:10px 20px; border-radius:5px; cursor:pointer;">CERRAR SESIÓN</button>
             </div>
         </div>
+    </div>
 
-        <!-- SECCIÓN DESTACADOS -->
-        <div id="tab-destacados" class="glass-card" style="padding: 20px;">
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                <textarea id="post-input" placeholder="¿Qué cuentas, we? (Usa <b>, <i> o <img>)" style="width:100%; height:70px; background:none; border:none; color:white; outline:none; resize:none;"></textarea>
-                <button class="btn-blue" style="float:right; padding: 6px 15px;" onclick="publish()">PUBLICAR</button>
-                <div style="clear:both;"></div>
-            </div>
-            <div id="muro-posts">
-                <!-- Posts aquí -->
-            </div>
-        </div>
-
-        <!-- SECCIÓN CONFIG -->
-        <div id="tab-config" class="glass-card" style="padding: 40px; text-align: center;">
-            <img id="conf-pfp" src="" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--accent);">
-            <h2 id="conf-name"></h2>
-            <button class="btn-blue" style="background:#ff4757;" onclick="logout()">CERRAR SESIÓN</button>
-        </div>
-
+    <div id="tab-login" style="margin-top:100px; text-align:center; background:rgba(0,0,0,0.8); padding:30px; border-radius:15px; border:1px solid var(--accent);">
+        <h2>Inicia Sesión</h2>
+        <input type="text" id="login-mail" placeholder="Email" style="display:block; width:200px; margin:10px auto; padding:8px;"><br>
+        <button onclick="login()" style="background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">ENTRAR</button>
     </div>
 
     <script>
-        let user = null;
-        const ADMIN_MAIL = "jugandoconitakito@gmail.com";
+        let currentUser = null;
 
-        function showTab(id) {
-            // Ocultar todas las pestañas
-            const tabs = ['login', 'home', 'destacados', 'config'];
-            tabs.forEach(t => document.getElementById('tab-' + t).style.display = 'none');
-            
-            // Mostrar la seleccionada
-            document.getElementById('tab-' + id).style.display = 'block';
+        function showTab(tabId) {
+            ['home', 'destacados', 'config'].forEach(id => {
+                document.getElementById('tab-' + id).style.display = 'none';
+            });
+            document.getElementById('tab-' + tabId).style.display = 'block';
         }
 
         function checkLogin() {
-            const data = localStorage.getItem('session');
-            if (data) {
-                user = JSON.parse(data);
-                loadUI();
-                showTab('home');
-            } else {
-                showTab('login');
+            const session = localStorage.getItem('itakito_session');
+            if(session) {
+                currentUser = JSON.parse(session);
+                initUI();
             }
         }
 
         function login() {
-            const mail = document.getElementById('email').value;
-            const password = document.getElementById('pass').value;
+            const mail = document.getElementById('login-mail').value;
+            if(!mail) return alert("Pon tu mail, we.");
+            
+            currentUser = {
+                name: mail.split('@')[0],
+                pfp: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                isAdmin: mail === "jugandoconitakito@gmail.com"
+            };
+            
+            localStorage.setItem('itakito_session', JSON.stringify(currentUser));
+            initUI();
+        }
 
-            if (!mail || !password) return alert("Pon tus datos, we.");
-
-            // Sistema de Admin vs Usuario
-            if (mail.toLowerCase() === ADMIN_MAIL) {
-                user = {
-                    name: "ItakitoYTblox",
-                    pfp: "https://yt3.googleusercontent.com/n2_9nfR7jLbPwRnJkQJ2oyMMQpS-r1wgRpftNcsKJgNT_RvEHkw5HYDgJV1Ke-P19-u6WnCkqn0=s160-c-k-c0x00ffffff-no-rj",
-                    isAdmin: true
-                };
-            } else {
-                // Simulación de registro: si el correo es de admin pero la contraseña no es del dueño (ejemplo), bloquear
-                user = {
-                    name: mail.split('@')[0],
-                    pfp: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-                    isAdmin: false
-                };
-            }
-
-            localStorage.setItem('session', JSON.stringify(user));
-            loadUI();
+        function initUI() {
+            document.getElementById('tab-login').style.display = 'none';
+            document.getElementById('main-window').style.display = 'block';
+            document.getElementById('nav-bar').style.display = 'flex';
+            document.getElementById('user-nav-name').innerText = currentUser.name;
+            document.getElementById('user-nav-pfp').src = currentUser.pfp;
+            document.getElementById('profile-name').innerText = currentUser.name;
             showTab('home');
         }
 
-        function loadUI() {
-            document.getElementById('nav-bar').style.display = 'flex';
-            document.getElementById('user-name-nav').innerHTML = user.name + (user.isAdmin ? ' <span class="badge">ADMIN</span>' : '');
-            document.getElementById('user-pfp-nav').src = user.pfp;
-            document.getElementById('conf-pfp').src = user.pfp;
-            document.getElementById('conf-name').innerText = user.name;
+        function addTag(tag) {
+            const area = document.getElementById('post-text');
+            area.value += `<${tag}></${tag}>`;
+            area.focus();
         }
 
-        function publish() {
-            const text = document.getElementById('post-input').value;
-            if (!text) return;
+        function createPost() {
+            const text = document.getElementById('post-text').value;
+            if(!text) return;
 
+            const postId = Date.now();
             const postHTML = `
-                <div class="feed-item">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <img src="${user.pfp}" style="width:30px; height:30px; border-radius:50%;">
-                        <strong>${user.name}</strong> ${user.isAdmin ? '<span class="badge">ADMIN</span>' : ''}
+                <div class="post" id="post-${postId}">
+                    <div class="post-header">
+                        <img src="${currentUser.pfp}" class="post-pfp">
+                        <strong>${currentUser.name}</strong> ${currentUser.isAdmin ? '<span class="badge">OWNER</span>' : ''}
                     </div>
-                    <div style="margin-top:10px; font-size:15px; line-height:1.4;">${text}</div>
+                    <div class="post-body">${text}</div>
+                    <div class="post-footer">
+                        <span onclick="toggleComments(${postId})">💬 <span id="count-${postId}">0</span> Comentarios</span>
+                        <span>🚀 Compartir</span>
+                    </div>
+                    <div class="comment-section" id="comments-${postId}">
+                        <div id="list-${postId}"></div>
+                        <div class="reply-input">
+                            <input type="text" id="input-${postId}" placeholder="Escribe un comentario...">
+                            <button onclick="addComment(${postId})" style="background:var(--accent); border:none; color:white; border-radius:4px; padding:0 10px; cursor:pointer;">➔</button>
+                        </div>
+                    </div>
                 </div>
             `;
+
+            document.getElementById('global-feed').innerHTML = postHTML + document.getElementById('global-feed').innerHTML;
+            document.getElementById('home-feed').innerHTML = postHTML + document.getElementById('home-feed').innerHTML;
+            document.getElementById('post-text').value = "";
+        }
+
+        function toggleComments(id) {
+            const section = document.getElementById('comments-' + id);
+            section.style.display = section.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function addComment(id) {
+            const input = document.getElementById('input-' + id);
+            const list = document.getElementById('list-' + id);
+            const countLabel = document.getElementById('count-' + id);
             
-            document.getElementById('muro-posts').innerHTML = postHTML + document.getElementById('muro-posts').innerHTML;
-            document.getElementById('post-input').value = "";
+            if(!input.value) return;
+
+            const newComment = document.createElement('div');
+            newComment.className = 'comment';
+            newComment.innerHTML = `<strong>${currentUser.name}:</strong> ${input.value}`;
+            list.appendChild(newComment);
+
+            countLabel.innerText = parseInt(countLabel.innerText) + 1;
+            input.value = "";
         }
 
         function logout() {
-            localStorage.removeItem('session');
+            localStorage.removeItem('itakito_session');
             location.reload();
         }
     </script>
