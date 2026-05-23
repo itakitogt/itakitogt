@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itakito_GT | Community OS</title>
+    <title>Itakito_GT | Community OS v2.0</title>
     <style>
         :root {
             --mac-bg: #1e1e1e;
@@ -14,86 +14,69 @@
 
         body {
             background: url('https://www.10wallpaper.com/wallpaper/1366x768/1508/sardinia_italy-Landscape_wallpaper_1366x768.jpg') no-repeat center center fixed;
-            background-size: cover;
-            margin: 0; font-family: 'Segoe UI', sans-serif; color: white;
-            display: flex; flex-direction: column; align-items: center; height: 100vh;
+            background-size: cover; margin: 0; font-family: 'Segoe UI', sans-serif; color: white;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        /* --- LOGIN CORREGIDO (Contraseña arriba, Email abajo) --- */
+        /* --- LOGIN VALIDADO --- */
         #tab-login {
             margin-top: 100px; text-align: center; background: rgba(0,0,0,0.85); 
-            padding: 40px; border-radius: 20px; border: 1px solid var(--accent); width: 300px;
+            padding: 40px; border-radius: 20px; border: 1px solid var(--accent); width: 320px;
             backdrop-filter: blur(10px);
         }
         #tab-login input {
-            display: block; width: 100%; margin: 15px 0; padding: 12px; 
+            display: block; width: 100%; margin: 10px 0; padding: 12px; 
             background: #222; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box;
         }
+        .error-hint { color: #ff4757; font-size: 11px; text-align: left; margin-bottom: 10px; display: block; }
 
         /* --- VENTANA MAC --- */
         .mac-window {
             background: var(--mac-bg); width: 90%; max-width: 800px;
-            border-radius: 12px; margin-top: 80px; border: 1px solid var(--border);
-            display: none; flex-direction: column; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border-radius: 12px; margin-top: 60px; border: 1px solid var(--border);
+            display: none; flex-direction: column; overflow: hidden; margin-bottom: 40px;
         }
-        .mac-header { background: var(--mac-header); padding: 12px; display: flex; align-items: center; gap: 8px; }
+        .mac-header { background: var(--mac-header); padding: 12px; display: flex; align-items: center; gap: 8px; position: sticky; top: 0; z-index: 10; }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
         .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
-        .mac-content { padding: 25px; max-height: 75vh; overflow-y: auto; }
+        .mac-content { padding: 20px; max-height: 80vh; overflow-y: auto; }
 
-        /* --- PERFIL CON CAMBIO DE IMAGEN --- */
+        /* --- PERFIL --- */
         .profile-area { text-align: center; padding: 20px; }
-        .pfp-container { position: relative; width: 120px; height: 120px; margin: 0 auto; cursor: pointer; }
+        .pfp-container { width: 120px; height: 120px; margin: 0 auto; cursor: pointer; position: relative; }
         .pfp-main { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; }
-        .pfp-overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; opacity: 0; transition: 0.3s;
-            font-size: 12px; font-weight: bold;
-        }
+        .pfp-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .pfp-container:hover .pfp-overlay { opacity: 1; }
+        .name-edit { background: transparent; border: 1px solid #444; color: white; font-size: 20px; text-align: center; padding: 5px; border-radius: 5px; margin-top: 10px; }
 
-        /* --- EDITOR DE POSTS --- */
-        .post-editor { background: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
+        /* --- POSTS & MEDIA --- */
+        .post { background: #252525; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .post-media { max-width: 100%; border-radius: 8px; margin-top: 10px; display: block; }
         .toolbar { display: flex; gap: 10px; margin-bottom: 10px; }
         .toolbar button { background: #444; border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
         .toolbar button:hover { background: var(--accent); }
-        textarea { 
-            width: 100%; height: 80px; background: #1a1a1a; border: 1px solid #333; 
-            color: white; padding: 12px; border-radius: 8px; resize: none; box-sizing: border-box;
-        }
-
-        /* --- POSTS Y COMENTARIOS --- */
-        .post { background: #252525; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .post-footer { display: flex; gap: 20px; font-size: 13px; color: #888; margin-top: 10px; }
-        .btn-action { cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
-        .btn-action:hover { color: var(--accent); }
-
-        .comment-box { 
-            background: #1a1a1a; margin-top: 15px; padding: 15px; border-radius: 8px; 
-            display: none; animation: fadeIn 0.3s ease;
-        }
-        .comment-input-row { display: flex; gap: 10px; }
+        
+        .comment-box { background: #1a1a1a; margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
+        .comment-input-row { display: flex; gap: 8px; margin-top: 10px; }
         .comment-input-row input { flex: 1; background: #333; border: none; color: white; padding: 8px; border-radius: 4px; }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .btn-post { background: var(--accent); border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body onload="checkLogin()">
 
     <div id="tab-login">
-        <h2 style="margin-bottom: 25px;">Inicia Sesión</h2>
+        <h2 style="margin-bottom: 20px;">ItaProjects OS</h2>
         <input type="password" id="login-pass" placeholder="Contraseña">
-        <input type="email" id="login-mail" placeholder="Email">
-        <button onclick="login()" style="background:var(--accent); color:white; border:none; width:100%; padding:12px; border-radius:8px; cursor:pointer; font-weight:bold;">ENTRAR</button>
+        <span class="error-hint">⚠️ Mínimo 8 caracteres</span>
+        <input type="email" id="login-mail" placeholder="Email (debe ser @gmail.com)">
+        <button onclick="login()" style="background:var(--accent); color:white; border:none; width:100%; padding:12px; border-radius:8px; cursor:pointer; font-weight:bold;">INICIAR SESIÓN</button>
     </div>
 
     <div id="main-window" class="mac-window">
         <div class="mac-header">
             <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-            <span style="font-size:12px; margin-left:10px; opacity:0.6;">Itakito_GT Terminal v1.0</span>
-            <div style="margin-left:auto; display:flex; gap:15px; font-size:12px;">
+            <div style="margin-left:auto; display:flex; gap:15px; font-size:12px; font-weight: bold;">
                 <span onclick="showTab('home')" style="cursor:pointer;">INICIO</span>
                 <span onclick="showTab('feed')" style="cursor:pointer;">FEED</span>
                 <span onclick="showTab('config')" style="cursor:pointer;">PERFIL</span>
@@ -101,57 +84,63 @@
         </div>
 
         <div class="mac-content">
-            <div id="tab-home" style="display:none;">
-                <div id="home-posts"></div>
-            </div>
+            <div id="tab-home" style="display:none;"><div id="home-posts"></div></div>
 
             <div id="tab-feed" style="display:none;">
-                <div class="post-editor">
+                <div style="background:#2a2a2a; padding:15px; border-radius:10px; margin-bottom:20px;">
                     <div class="toolbar">
-                        <button onclick="wrapText('b')"><b>N</b></button>
-                        <button onclick="wrapText('i')"><i>K</i></button>
-                        <button onclick="document.getElementById('img-upload').click()">🖼️ Subir</button>
-                        <input type="file" id="img-upload" hidden accept="image/*" onchange="handleImage(this, 'post')">
+                        <button onclick="applyStyle('b')"><b>B</b></button>
+                        <button onclick="applyStyle('i')"><i>I</i></button>
+                        <button onclick="document.getElementById('media-up').click()">📁 Subir Foto/Video</button>
                     </div>
-                    <textarea id="post-input" placeholder="¿Qué cuentas, we?"></textarea>
-                    <button onclick="createPost()" style="width:100%; margin-top:10px; background:var(--accent); border:none; color:white; padding:10px; border-radius:5px; cursor:pointer;">PUBLICAR</button>
+                    <textarea id="post-input" placeholder="¿Qué estás desarrollando, we?" style="width:100%; height:80px; background:#111; border:1px solid #444; color:white; padding:10px; border-radius:8px; resize:none; box-sizing:border-box;"></textarea>
+                    <input type="file" id="media-up" hidden accept="image/*,video/*" onchange="previewMedia(this)">
+                    <div id="media-preview"></div>
+                    <button class="btn-post" onclick="createPost()">PUBLICAR</button>
                 </div>
                 <div id="global-feed"></div>
             </div>
 
             <div id="tab-config" class="profile-area" style="display:none;">
-                <div class="pfp-container" onclick="document.getElementById('pfp-upload').click()">
+                <div class="pfp-container" onclick="document.getElementById('pfp-up').click()">
                     <img id="my-pfp" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="pfp-main">
                     <div class="pfp-overlay">CAMBIAR</div>
                 </div>
-                <input type="file" id="pfp-upload" hidden accept="image/*" onchange="handleImage(this, 'profile')">
-                <h2 id="my-name" style="margin-top:15px;"></h2>
-                <button onclick="logout()" style="background:#ff4757; border:none; color:white; padding:10px 20px; border-radius:5px; cursor:pointer; margin-top:20px;">CERRAR SESIÓN</button>
+                <input type="file" id="pfp-up" hidden onchange="changePFP(this)">
+                <br>
+                <input type="text" id="edit-name" class="name-edit" onchange="updateName(this.value)">
+                <p style="font-size:12px; opacity:0.5;">Toca el nombre para cambiarlo</p>
+                <button onclick="logout()" style="background:#ff4757; border:none; color:white; padding:10px 20px; border-radius:5px; cursor:pointer; margin-top:30px;">CERRAR SESIÓN</button>
             </div>
         </div>
     </div>
 
     <script>
         let user = null;
+        let tempMedia = "";
 
         function login() {
             const mail = document.getElementById('login-mail').value;
-            if(!mail) return alert("Pon tu email, we");
+            const pass = document.getElementById('login-pass').value;
+
+            if(!mail.includes("@gmail.com")) return alert("El email debe ser @gmail.com, we.");
+            if(pass.length < 8) return alert("La contraseña debe tener mínimo 8 caracteres.");
+
             user = { name: mail.split('@')[0], pfp: "https://cdn-icons-png.flaticon.com/512/149/149071.png" };
-            localStorage.setItem('ita_session', JSON.stringify(user));
+            localStorage.setItem('ita_v2', JSON.stringify(user));
             initUI();
         }
 
         function checkLogin() {
-            const saved = localStorage.getItem('ita_session');
+            const saved = localStorage.getItem('ita_v2');
             if(saved) { user = JSON.parse(saved); initUI(); }
         }
 
         function initUI() {
             document.getElementById('tab-login').style.display = 'none';
             document.getElementById('main-window').style.display = 'flex';
-            document.getElementById('my-name').innerText = user.name;
             document.getElementById('my-pfp').src = user.pfp;
+            document.getElementById('edit-name').value = user.name;
             showTab('home');
         }
 
@@ -160,75 +149,79 @@
             document.getElementById('tab-'+id).style.display = 'block';
         }
 
-        // --- ARREGLO DE FORMATO (Negrita/Cursiva) ---
-        function wrapText(tag) {
-            const el = document.getElementById('post-input');
-            const start = el.selectionStart;
-            const end = el.selectionEnd;
-            const text = el.value;
-            el.value = text.substring(0, start) + `<${tag}>` + text.substring(start, end) + `</${tag}>` + text.substring(end);
-            el.focus();
-        }
+        function updateName(val) { user.name = val; localStorage.setItem('ita_v2', JSON.stringify(user)); }
 
-        // --- MANEJO DE IMÁGENES (Subir desde Galería) ---
-        function handleImage(input, type) {
+        function changePFP(input) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                if(type === 'profile') {
-                    user.pfp = e.target.result;
-                    document.getElementById('my-pfp').src = e.target.result;
-                    localStorage.setItem('ita_session', JSON.stringify(user));
-                } else {
-                    document.getElementById('post-input').value += `<img src="${e.target.result}" style="max-width:100%; border-radius:8px; margin-top:10px;">`;
-                }
+            reader.onload = (e) => {
+                user.pfp = e.target.result;
+                document.getElementById('my-pfp').src = e.target.result;
+                localStorage.setItem('ita_v2', JSON.stringify(user));
             };
             reader.readAsDataURL(input.files[0]);
         }
 
-        // --- SISTEMA DE POSTS Y COMENTARIOS CORREGIDO ---
+        function applyStyle(tag) {
+            const area = document.getElementById('post-input');
+            const start = area.selectionStart;
+            const end = area.selectionEnd;
+            area.value = area.value.substring(0, start) + `<${tag}>` + area.value.substring(start, end) + `</${tag}>` + area.value.substring(end);
+            area.focus();
+        }
+
+        function previewMedia(input) {
+            const file = input.files[0];
+            if(file.type.includes('video') && file.size > 10 * 1024 * 1024) return alert("Video muy pesado, we.");
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if(file.type.includes('video')) {
+                    tempMedia = `<video src="${e.target.result}" class="post-media" controls onloadedmetadata="if(this.duration > 60){alert('Máximo 60 seg, we'); document.getElementById('media-preview').innerHTML=''}"></video>`;
+                } else {
+                    tempMedia = `<img src="${e.target.result}" class="post-media">`;
+                }
+                document.getElementById('media-preview').innerHTML = tempMedia;
+            };
+            reader.readAsDataURL(file);
+        }
+
         function createPost() {
-            const content = document.getElementById('post-input').value;
-            if(!content) return;
+            const txt = document.getElementById('post-input').value;
+            if(!txt && !tempMedia) return;
             const id = Date.now();
             const html = `
                 <div class="post">
                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-                        <img src="${user.pfp}" style="width:30px; height:30px; border-radius:50%;">
+                        <img src="${user.pfp}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
                         <strong>${user.name}</strong>
                     </div>
-                    <div>${content}</div>
+                    <div>${txt}</div>
+                    ${tempMedia}
                     <div class="post-footer">
-                        <div class="btn-action" onclick="toggleComments(${id})">💬 <span id="count-${id}">0</span> Comentarios</div>
+                        <div style="cursor:pointer" onclick="toggleCom(${id})">💬 <span id="c-${id}">0</span> Comentarios</div>
                     </div>
                     <div class="comment-box" id="box-${id}">
-                        <div id="list-${id}" style="margin-bottom:10px; font-size:13px;"></div>
+                        <div id="list-${id}"></div>
                         <div class="comment-input-row">
-                            <input type="text" id="in-${id}" placeholder="Escribe un comentario...">
-                            <button onclick="addComment(${id})" style="background:var(--accent); color:white; border:none; padding:5px 15px; border-radius:4px; cursor:pointer;">Comentar</button>
+                            <input type="text" id="in-${id}" placeholder="Comenta algo...">
+                            <button onclick="addCom(${id})" style="background:var(--accent); border:none; color:white; padding:5px 15px; border-radius:4px; cursor:pointer;">Comentar</button>
                         </div>
                     </div>
                 </div>`;
             document.getElementById('global-feed').insertAdjacentHTML('afterbegin', html);
             document.getElementById('home-posts').insertAdjacentHTML('afterbegin', html);
             document.getElementById('post-input').value = "";
+            document.getElementById('media-preview').innerHTML = "";
+            tempMedia = "";
         }
 
-        function toggleComments(id) {
-            const box = document.getElementById('box-'+id);
-            box.style.display = box.style.display === 'block' ? 'none' : 'block';
+        function toggleCom(id) {
+            const b = document.getElementById('box-'+id);
+            b.style.display = (b.style.display === 'block') ? 'none' : 'block';
         }
 
-        function addComment(id) {
+        function addCom(id) {
             const input = document.getElementById('in-'+id);
-            const list = document.getElementById('list-'+id);
-            const count = document.getElementById('count-'+id);
             if(!input.value) return;
-            list.innerHTML += `<div style="margin-top:5px;"><strong>${user.name}:</strong> ${input.value}</div>`;
-            count.innerText = parseInt(count.innerText) + 1;
-            input.value = "";
-        }
-
-        function logout() { localStorage.removeItem('ita_session'); location.reload(); }
-    </script>
-</body>
-</html>
+            document.getElementById('list-'+id).innerHTML += `<div style="margin-top:8px; font-size:13px;"><strong>${user.name}:</strong> ${input.value}</div>`;
+            document.getElementById('c-'+id).innerText = parseInt(document.
